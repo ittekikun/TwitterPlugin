@@ -10,6 +10,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
+import com.github.ittekikun.Command.CommandTwitterPlugin;
 import com.github.ittekikun.Event.LoginEvent;
 import com.github.ittekikun.Event.McbansEvent;
 import com.github.ittekikun.Uti.Uti;

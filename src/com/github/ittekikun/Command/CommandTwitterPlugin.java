@@ -1,4 +1,4 @@
-package com.github.ittekikun;
+package com.github.ittekikun.Command;
 
 
 import org.bukkit.ChatColor;
@@ -17,6 +17,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
+import com.github.ittekikun.TwitterPlugin;
 import com.github.ittekikun.Uti.Uti;
 
 public class CommandTwitterPlugin implements Listener, CommandExecutor
