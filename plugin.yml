@@ -1,0 +1,31 @@
+name: TwitterPlugin
+main: com.github.ittekikun.TwitterPlugin
+version: 2.1
+description: TwitterPlugin.
+authors: [ittekikun]
+website: http://forum.minecraftuser.jp/viewtopic.php?f=26&t=8950&start=40#p72180
+
+commands:
+   TwitterPlugin:
+      description: This is a TwitterPlugin command.
+      usage: "Usage: /TwitterPlugin [args]"
+   twp:
+      description: This is a TwitterPlugin command.
+      usage: "Usage: /twp [args]"
+      
+permissions:
+  TwitterPlugin.*:
+    description: Permission to perform all commands.
+    default: op
+  TwitterPlugin.reload:
+    description: Permission to reload configuration..
+    default: false
+  TwitterPlugin.help:
+    description: Permission to view help information.
+    default: false
+  TwitterPlugin.itweet:
+    description: Permission to ItemTweet command.
+    default: false
+  TwitterPlugin.tweet:
+    description: Permission to Tweet command.
+    default: op

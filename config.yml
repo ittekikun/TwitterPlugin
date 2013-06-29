@@ -1,0 +1,12 @@
+consumerKey: xxxxxxxxxx
+consumerSecret: xxxxxxxxxx
+accessToken: xxxxxxxxxx
+accessTokenSecret: xxxxxxxxxx
+ServerStartTweet: false
+ServerStopTweet: false
+McbansTweet: false
+PlayerLoginTweet: true
+LoginMessageTemplate: xxxxxxxxxx
+LogoutMessageTemplate: xxxxxxxxxx
+KickMessageTemplate: xxxxxxxxxx
+BanMessageTemplate: xxxxxxxxxx
