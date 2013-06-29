@@ -35,12 +35,13 @@ public class CommandTweet implements CommandExecutor
 			
 			String tw = Uti.ArrayUnion(args, 0);
 			
-			player.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + tw);
+			player.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + tw + "を投稿しました。");
 
 			TwitterFactory factory = new TwitterFactory();
 			Twitter twitter = factory.getInstance();
 			twitter.setOAuthConsumer(TwitterPlugin.consumerKey,TwitterPlugin.consumerSecret);
 			twitter.setOAuthAccessToken(new AccessToken(TwitterPlugin.accessToken, TwitterPlugin.accessTokenSecret));
+
 			try
 			{
 				twitter.updateStatus("【サーバーから" + name + "さんが投稿】" +  "\n" + tw);

@@ -32,6 +32,8 @@ public class TwitterPlugin extends JavaPlugin{
 	public static String K_message_temp;
 	public static String B_message_temp;
 	
+	public static int Number_of_diamond;
+	
 	public static final String KEYWORD_USER = "$user";
 	public static final String KEYWORD_REASON = "$reason";
 	public static final String KEYWORD_SENDER = "$sender";
@@ -77,6 +79,8 @@ public class TwitterPlugin extends JavaPlugin{
 		
 		K_message_temp = this.getConfig().getString("KickMessageTemplate", "$userが、「$reason」という理由で、$senderによってKICKされました。【自動投稿】");
 		B_message_temp = this.getConfig().getString("BanMessageTemplate", "$userが、「$reason」という理由で、$senderによってグローバルBANされました。【自動投稿】");
+		
+		Number_of_diamond = this.getConfig().getInt("Number_of_diamond",5);
 		
 		ServerStartTweet();
 	}

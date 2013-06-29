@@ -104,7 +104,7 @@ public class CommandTwitterPlugin implements Listener, CommandExecutor
     	Player player = (Player)sender;
 		player.getPlayer(); 
 		PlayerInventory inventory = player.getInventory();
-		ItemStack diamondstack = new ItemStack(Material.DIAMOND, 5);
+		ItemStack diamondstack = new ItemStack(Material.DIAMOND, TwitterPlugin.Number_of_diamond);
 		String name = player.getName();
 		
 		if (inventory.contains(diamondstack))

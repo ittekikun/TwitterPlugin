@@ -10,3 +10,4 @@ LoginMessageTemplate: xxxxxxxxxx
 LogoutMessageTemplate: xxxxxxxxxx
 KickMessageTemplate: xxxxxxxxxx
 BanMessageTemplate: xxxxxxxxxx
+Number_of_diamond: 5
