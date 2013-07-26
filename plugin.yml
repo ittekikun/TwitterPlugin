@@ -4,6 +4,7 @@ version: 2.1
 description: TwitterPlugin.
 authors: [ittekikun]
 website: http://forum.minecraftuser.jp/viewtopic.php?f=26&t=8950&start=40#p72180
+softdepend: [LunaChat, MCBans]
 
 commands:
    TwitterPlugin:

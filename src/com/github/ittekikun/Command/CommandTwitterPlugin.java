@@ -2,23 +2,16 @@ package com.github.ittekikun.Command;
 
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.Plugin;
 
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
 
 import com.github.ittekikun.TwitterPlugin;
-import com.github.ittekikun.Uti.Uti;
 
 public class CommandTwitterPlugin implements Listener, CommandExecutor
 {
@@ -56,7 +49,8 @@ public class CommandTwitterPlugin implements Listener, CommandExecutor
     		{
     			if(sender.hasPermission("TwitterPlugin.itweet"))
     			{
-        			ItemTweet(sender,args);
+    				CommandItemTweet IT = new CommandItemTweet();
+        			IT.ItemTweet(sender,args);
                 }
     			else
     			{
@@ -67,7 +61,27 @@ public class CommandTwitterPlugin implements Listener, CommandExecutor
     		{
     			if(sender.hasPermission("TwitterPlugin.tweet"))
     			{
-    				Tweet(sender,args);
+    				CommandTweet T = new CommandTweet();
+        			try
+        			{
+						T.Tweet(sender,args);
+					} 
+        			catch (TwitterException e)
+					{
+						e.printStackTrace();
+					}
+                }
+    			else
+    			{
+    				player.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + "あなたは権限を持っていません。");
+    			}
+    		}
+    		else if (args[0].equals("twt"))
+    		{
+    			if(sender.hasPermission("TwitterPlugin.ttweet"))
+    			{
+    				CommandToggleTweet TT = new CommandToggleTweet();
+        			TT.ToggleTweet(sender,args);
                 }
     			else
     			{
@@ -85,10 +99,8 @@ public class CommandTwitterPlugin implements Listener, CommandExecutor
 
     private void ReloadPlugin(CommandSender sender)
     {
-    	Player player = (Player)sender;
-    	
         plugin.reloadConfig();
-        player.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + "configをリロードしました。");
+        sender.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + "configをリロードしました。");
     }
 
     private void ShowHelp(CommandSender sender)
@@ -99,57 +111,4 @@ public class CommandTwitterPlugin implements Listener, CommandExecutor
         sender.sendMessage(" ");
     }
     
-    private void ItemTweet(CommandSender sender, String[] args)
-    {
-    	Player player = (Player)sender;
-		player.getPlayer(); 
-		PlayerInventory inventory = player.getInventory();
-		ItemStack diamondstack = new ItemStack(Material.DIAMOND, TwitterPlugin.Number_of_diamond);
-		String name = player.getName();
-		
-		if (inventory.contains(diamondstack))
-		{
-			inventory.remove(diamondstack); 
-			
-			String tw = Uti.ArrayUnion(args, 1);
-			
-			TwitterFactory factory = new TwitterFactory();
-			Twitter twitter = factory.getInstance();
-			twitter.setOAuthConsumer(TwitterPlugin.consumerKey,TwitterPlugin.consumerSecret);
-			twitter.setOAuthAccessToken(new AccessToken(TwitterPlugin.accessToken, TwitterPlugin.accessTokenSecret));
-			try
-			{
-				twitter.updateStatus("【サーバーから" + name + "さんが投稿】" +  "\n" + tw);
-				player.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + "「" + tw + "」" +  "を投稿しました");
-			}
-			catch (TwitterException e)
-			{
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-		}
-    }
-    
-    private void Tweet(CommandSender sender, String[] args)
-    {
-    	Player player = (Player)sender;
-		String name = player.getName();
-			
-		String tw = Uti.ArrayUnion(args, 1);
-
-		TwitterFactory factory = new TwitterFactory();
-		Twitter twitter = factory.getInstance();
-		twitter.setOAuthConsumer(TwitterPlugin.consumerKey,TwitterPlugin.consumerSecret);
-		twitter.setOAuthAccessToken(new AccessToken(TwitterPlugin.accessToken, TwitterPlugin.accessTokenSecret));
-		try
-		{
-			twitter.updateStatus("【サーバーから" + name + "さんが投稿】" +  "\n" + tw);
-			player.sendMessage(ChatColor.RED + "【TwitterPlugin】" + ChatColor.WHITE + "「" + tw + "」" +  "を投稿しました");
-		}
-		catch (TwitterException e)
-		{
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
-		}
-	}
 }

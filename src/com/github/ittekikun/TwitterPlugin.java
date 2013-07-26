@@ -1,19 +1,15 @@
 package com.github.ittekikun;
 
-import java.util.Date;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
 
 import com.github.ittekikun.Command.CommandTwitterPlugin;
 import com.github.ittekikun.Event.LoginEvent;
+import com.github.ittekikun.Event.LunaChatEvent;
 import com.github.ittekikun.Event.McbansEvent;
-import com.github.ittekikun.Uti.Uti;
 
 
 public class TwitterPlugin extends JavaPlugin{
@@ -29,8 +25,14 @@ public class TwitterPlugin extends JavaPlugin{
 	public static String I_message_temp;
 	public static String O_message_temp;
 	
+	public static String CC_message_temp;
+	public static String CD_message_temp;
+	
 	public static String K_message_temp;
 	public static String B_message_temp;
+	
+	public static String SS_message_temp;
+	public static String ST_message_temp;
 	
 	public static int Number_of_diamond;
 	
@@ -38,6 +40,9 @@ public class TwitterPlugin extends JavaPlugin{
 	public static final String KEYWORD_REASON = "$reason";
 	public static final String KEYWORD_SENDER = "$sender";
 	public static final String KEYWORD_NUMBER = "$number";
+	public static final String KEYWORD_CHANNEL = "$channel";
+	
+	public static final String prefix = "【TwitterPlugin】";
 
 	@Override
 	public void onEnable()
@@ -61,8 +66,31 @@ public class TwitterPlugin extends JavaPlugin{
 		
 		if (this.getConfig().getBoolean("McbansTweet"))
 		{
-			getServer().getPluginManager().registerEvents(new McbansEvent(), this);
+			if (getServer().getPluginManager().isPluginEnabled("MCBans") ) 
+			{
+				getServer().getPluginManager().registerEvents(new McbansEvent(), this);
+				logger.info(prefix + "MCBansと連携しました。");
+			}
+			else
+			{
+				logger.info(prefix + "MCBansが導入されてないので連携を無効化します。");
+			}
 		}
+		
+		if (this.getConfig().getBoolean("LunaChatTweet"))
+		{
+			if (getServer().getPluginManager().isPluginEnabled("LunaChat") ) 
+			{
+				getServer().getPluginManager().registerEvents(new LunaChatEvent(), this);
+				logger.info(prefix + "LunaChatと連携しました。");
+			}
+			else
+			{
+				logger.info(prefix + "LunaChatが導入されてないので連携を無効化します。");
+			}
+		}
+
+			//getServer().getPluginManager().registerEvents(new ToggleTweet(), this);
 		
 		//getCommand("tw").setExecutor(new CommandTweet());
 		getCommand("TwitterPlugin").setExecutor(new CommandTwitterPlugin());
@@ -77,57 +105,53 @@ public class TwitterPlugin extends JavaPlugin{
 		I_message_temp = this.getConfig().getString("LoginMessageTemplate", "$userさんがサーバーにログインしました。現在$number人がログインしています。【自動投稿】");
 		O_message_temp = this.getConfig().getString("LogoutMessageTemplate", "$userさんがサーバーからログアウトしました。現在$number人がログインしています。【自動投稿】");
 		
+		SS_message_temp = this.getConfig().getString("ServerStartTemplate", "サーバーを起動しました。【自動投稿】");
+		ST_message_temp = this.getConfig().getString("ServerStopTemplate", "サーバーが停止しました。【自動投稿】");
+		
+		CC_message_temp = this.getConfig().getString("ChannelCreateTemplate", "チャットチャンネル「$channel」が作成されました。【自動投稿】");
+		CD_message_temp = this.getConfig().getString("ChannelDeleteTemplate", "チャットチャンネル「$channel」が削除されました。【自動投稿】");
+		
 		K_message_temp = this.getConfig().getString("KickMessageTemplate", "$userが、「$reason」という理由で、$senderによってKICKされました。【自動投稿】");
 		B_message_temp = this.getConfig().getString("BanMessageTemplate", "$userが、「$reason」という理由で、$senderによってグローバルBANされました。【自動投稿】");
 		
 		Number_of_diamond = this.getConfig().getInt("Number_of_diamond",5);
 		
-		ServerStartTweet();
+		try 
+		{
+			ServerStartTweet();
+		} 
+		catch (TwitterException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void onDisable()
 	{
-		ServerStopTweet();
+		try
+		{
+			ServerStopTweet();
+		} 
+		catch (TwitterException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
-	private void ServerStartTweet()
+	private void ServerStartTweet() throws TwitterException
     {
 		if (this.getConfig().getBoolean("ServerStartTweet"))
 		{
-			TwitterFactory factory = new TwitterFactory();
-			Twitter twitter = factory.getInstance();
-			twitter.setOAuthConsumer(TwitterPlugin.consumerKey,TwitterPlugin.consumerSecret);
-			twitter.setOAuthAccessToken(new AccessToken(TwitterPlugin.accessToken, TwitterPlugin.accessTokenSecret));
-			
-			Date Time = Uti.TimeGet();  
-			
-			try {
-				twitter.updateStatus("サーバーを起動しました。【自動投稿】" + "\n" +Time);
-			} catch (TwitterException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
+			Tweet.Tweet(SS_message_temp);
 		}
     }
 	
-	private void ServerStopTweet()
+	private void ServerStopTweet() throws TwitterException
     {
 		if (this.getConfig().getBoolean("ServerStopTweet"))
 		{
-			TwitterFactory factory = new TwitterFactory();
-			Twitter twitter = factory.getInstance();
-			twitter.setOAuthConsumer(TwitterPlugin.consumerKey,TwitterPlugin.consumerSecret);
-			twitter.setOAuthAccessToken(new AccessToken(TwitterPlugin.accessToken, TwitterPlugin.accessTokenSecret));
-			
-			Date Time = Uti.TimeGet();  
-			
-			try {
-				twitter.updateStatus("サーバーを終了しました。【自動投稿】" + "\n" +Time);
-			} catch (TwitterException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
+			Tweet.Tweet(ST_message_temp);
 		}
     }
 	
@@ -136,6 +160,4 @@ public class TwitterPlugin extends JavaPlugin{
 	{
 		return plugin;
 	}
-	
-	
 }
