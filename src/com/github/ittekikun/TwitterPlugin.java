@@ -34,6 +34,8 @@ public class TwitterPlugin extends JavaPlugin{
 	public static String SS_message_temp;
 	public static String ST_message_temp;
 	
+	public static String T_message_temp;
+	
 	public static int Number_of_diamond;
 	
 	public static final String KEYWORD_USER = "$user";
@@ -41,12 +43,39 @@ public class TwitterPlugin extends JavaPlugin{
 	public static final String KEYWORD_SENDER = "$sender";
 	public static final String KEYWORD_NUMBER = "$number";
 	public static final String KEYWORD_CHANNEL = "$channel";
+	public static final String KEYWORD_MESSAGE = "$message";
 	
 	public static final String prefix = "【TwitterPlugin】";
 
 	@Override
 	public void onEnable()
 	{
+		consumerKey = this.getConfig().getString("consumerKey","xxxxxxxxxx");
+		consumerSecret = this.getConfig().getString("consumerSecret","xxxxxxxxxx");
+		accessToken = this.getConfig().getString("accessToken","xxxxxxxxxx");
+		accessTokenSecret = this.getConfig().getString("accessTokenSecret","xxxxxxxxxx");
+		
+		I_message_temp = this.getConfig().getString("LoginMessageTemplate", "$userさんがサーバーにログインしました。現在$number人がログインしています。【自動投稿】");
+		O_message_temp = this.getConfig().getString("LogoutMessageTemplate", "$userさんがサーバーからログアウトしました。現在$number人がログインしています。【自動投稿】");
+		
+		SS_message_temp = this.getConfig().getString("ServerStartTemplate", "サーバーを起動しました。【自動投稿】");
+		ST_message_temp = this.getConfig().getString("ServerStopTemplate", "サーバーが停止しました。【自動投稿】");
+		
+		CC_message_temp = this.getConfig().getString("ChannelCreateTemplate", "チャットチャンネル「$channel」が作成されました。【自動投稿】");
+		CD_message_temp = this.getConfig().getString("ChannelDeleteTemplate", "チャットチャンネル「$channel」が削除されました。【自動投稿】");
+		
+		K_message_temp = this.getConfig().getString("KickMessageTemplate", "$userが、「$reason」という理由で、$senderによってKICKされました。【自動投稿】");
+		B_message_temp = this.getConfig().getString("BanMessageTemplate", "$userが、「$reason」という理由で、$senderによってグローバルBANされました。【自動投稿】");
+		
+		T_message_temp = this.getConfig().getString("TimelineTemplate", "@$user - $message");
+		
+		Number_of_diamond = this.getConfig().getInt("Number_of_diamond",5);
+		
+		if (this.getConfig().getBoolean("ShowTimeline"))
+		{
+			Timeline.ShowTimeline();
+		}
+
 		plugin = this;
 
 		this.saveDefaultConfig();
@@ -97,24 +126,7 @@ public class TwitterPlugin extends JavaPlugin{
 		getCommand("twp").setExecutor(new CommandTwitterPlugin());
 		
 		
-		consumerKey = this.getConfig().getString("consumerKey","xxxxxxxxxx");
-		consumerSecret = this.getConfig().getString("consumerSecret","xxxxxxxxxx");
-		accessToken = this.getConfig().getString("accessToken","xxxxxxxxxx");
-		accessTokenSecret = this.getConfig().getString("accessTokenSecret","xxxxxxxxxx");
 		
-		I_message_temp = this.getConfig().getString("LoginMessageTemplate", "$userさんがサーバーにログインしました。現在$number人がログインしています。【自動投稿】");
-		O_message_temp = this.getConfig().getString("LogoutMessageTemplate", "$userさんがサーバーからログアウトしました。現在$number人がログインしています。【自動投稿】");
-		
-		SS_message_temp = this.getConfig().getString("ServerStartTemplate", "サーバーを起動しました。【自動投稿】");
-		ST_message_temp = this.getConfig().getString("ServerStopTemplate", "サーバーが停止しました。【自動投稿】");
-		
-		CC_message_temp = this.getConfig().getString("ChannelCreateTemplate", "チャットチャンネル「$channel」が作成されました。【自動投稿】");
-		CD_message_temp = this.getConfig().getString("ChannelDeleteTemplate", "チャットチャンネル「$channel」が削除されました。【自動投稿】");
-		
-		K_message_temp = this.getConfig().getString("KickMessageTemplate", "$userが、「$reason」という理由で、$senderによってKICKされました。【自動投稿】");
-		B_message_temp = this.getConfig().getString("BanMessageTemplate", "$userが、「$reason」という理由で、$senderによってグローバルBANされました。【自動投稿】");
-		
-		Number_of_diamond = this.getConfig().getInt("Number_of_diamond",5);
 		
 		try 
 		{
