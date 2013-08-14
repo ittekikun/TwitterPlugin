@@ -10,6 +10,7 @@ import com.github.ittekikun.Command.CommandTwitterPlugin;
 import com.github.ittekikun.Event.LoginEvent;
 import com.github.ittekikun.Event.LunaChatEvent;
 import com.github.ittekikun.Event.McbansEvent;
+import com.github.ittekikun.Gui.OpenGui;
 
 
 public class TwitterPlugin extends JavaPlugin{
@@ -50,6 +51,10 @@ public class TwitterPlugin extends JavaPlugin{
 	@Override
 	public void onEnable()
 	{
+		Thread OpenGui = new Thread(new OpenGui(plugin));
+		OpenGui.start();
+		
+		
 		consumerKey = this.getConfig().getString("consumerKey","xxxxxxxxxx");
 		consumerSecret = this.getConfig().getString("consumerSecret","xxxxxxxxxx");
 		accessToken = this.getConfig().getString("accessToken","xxxxxxxxxx");
